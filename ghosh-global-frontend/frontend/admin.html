@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Ghosh Global Services</title>
+  <!-- ============================================================
+       FAVICON — same as main site
+  ============================================================ -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:#0A3D7C; --blue-lt:#1E6FD9; --yellow:#F5C800;
+      --dark:#0C0E12; --surface:#161A22; --card:#1E2330;
+      --border:rgba(255,255,255,0.08); --gray:#6B7280; --white:#fff;
+      --font-d:'Barlow Condensed',sans-serif; --font-b:'Barlow',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font-b);background:var(--dark);color:var(--white);min-height:100vh;}
+
+    /* LOGIN */
+    #login-screen {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(10,61,124,0.4) 0%, transparent 70%), var(--dark);
+    }
+    .login-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-top:3px solid var(--yellow); border-radius:8px;
+      padding:48px 40px; width:100%; max-width:400px;
+    }
+    .login-logo {
+      font-family:var(--font-d); font-weight:800; font-size:28px;
+      color:var(--white); margin-bottom:6px;
+    }
+    .login-logo span{color:var(--yellow);}
+    .login-sub{font-size:13px;color:var(--gray);margin-bottom:32px;}
+    .login-card label{display:block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);font-weight:600;margin-bottom:6px;}
+    .login-card input[type=password] {
+      width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);
+      border-radius:4px;padding:12px 14px;font-family:var(--font-b);font-size:14px;
+      color:var(--white);outline:none;margin-bottom:20px;transition:border-color 0.2s;
+    }
+    .login-card input[type=password]:focus{border-color:var(--yellow);}
+    .btn-yellow {
+      width:100%;background:var(--yellow);color:var(--blue);
+      border:none;border-radius:4px;padding:13px;
+      font-family:var(--font-d);font-weight:700;font-size:16px;letter-spacing:0.05em;
+      cursor:pointer;transition:background 0.2s;
+    }
+    .btn-yellow:hover{background:#FFD700;}
+    #login-error{font-size:13px;color:#f87171;margin-top:12px;min-height:20px;}
+
+    /* ADMIN SHELL */
+    #admin-shell{display:none;}
+    .admin-nav {
+      background:var(--surface); border-bottom:1px solid var(--border);
+      border-top:3px solid var(--yellow);
+      padding:0 32px; height:60px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:10;
+    }
+    .admin-nav-logo{font-family:var(--font-d);font-weight:700;font-size:18px;color:var(--white);}
+    .admin-nav-logo span{color:var(--yellow);}
+    .admin-nav-right{display:flex;align-items:center;gap:16px;}
+    .nav-status{font-size:12px;color:var(--gray);}
+    .btn-sm{
+      background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:4px;
+      padding:6px 14px;font-size:13px;color:var(--white);cursor:pointer;transition:background 0.2s;
+    }
+    .btn-sm:hover{background:rgba(255,255,255,0.1);}
+    .btn-danger{border-color:rgba(248,113,113,0.3);color:#f87171;}
+    .admin-body{display:flex;min-height:calc(100vh - 60px);}
+    .admin-sidebar{
+      width:220px;background:var(--surface);border-right:1px solid var(--border);
+      padding:24px 0;flex-shrink:0;
+    }
+    .sidebar-item{
+      display:flex;align-items:center;gap:10px;padding:12px 24px;
+      font-size:14px;color:var(--gray);cursor:pointer;transition:all 0.2s;
+      border-left:3px solid transparent;
+    }
+    .sidebar-item:hover{color:var(--white);background:rgba(255,255,255,0.03);}
+    .sidebar-item.active{color:var(--yellow);border-left-color:var(--yellow);background:rgba(245,200,0,0.05);}
+    .sidebar-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+    .admin-main{flex:1;padding:32px;overflow-y:auto;}
+
+    /* PANELS */
+    .panel{display:none;}
+    .panel.active{display:block;}
+    .panel-title{
+      font-family:var(--font-d);font-weight:700;font-size:28px;
+      color:var(--white);margin-bottom:6px;
+    }
+    .panel-sub{font-size:13px;color:var(--gray);margin-bottom:28px;}
+
+    /* STATS CARDS */
+    .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:20px 24px;}
+    .stat-card-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
+    .stat-card-val{font-family:var(--font-d);font-weight:800;font-size:32px;color:var(--yellow);}
+
+    /* SECTION CARD */
+    .admin-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:24px;margin-bottom:20px;}
+    .admin-card h3{font-family:var(--font-d);font-weight:600;font-size:18px;color:var(--white);margin-bottom:16px;}
+
+    /* FORM ELEMENTS */
+    .field-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+    .field-group label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);font-weight:600;}
+    .field-group input,.field-group textarea,.field-group select{
+      background:rgba(255,255,255,0.04);border:1px solid var(--border);
+      border-radius:4px;padding:10px 14px;font-family:var(--font-b);font-size:14px;
+      color:var(--white);outline:none;transition:border-color 0.2s;
+    }
+    .field-group input:focus,.field-group textarea:focus,.field-group select:focus{border-color:var(--yellow);}
+    .field-group select option{background:var(--card);}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+    /* LIST ITEMS */
+    .list-item{
+      display:flex;align-items:center;gap:12px;padding:12px 16px;
+      background:rgba(255,255,255,0.02);border:1px solid var(--border);
+      border-radius:4px;margin-bottom:8px;
+    }
+    .list-item-name{flex:1;font-size:14px;color:var(--white);}
+    .list-item-del{
+      background:none;border:1px solid rgba(248,113,113,0.3);border-radius:3px;
+      padding:4px 10px;font-size:12px;color:#f87171;cursor:pointer;transition:background 0.2s;
+    }
+    .list-item-del:hover{background:rgba(248,113,113,0.1);}
+    .add-row{display:flex;gap:10px;margin-top:12px;}
+    .add-row input{flex:1;}
+    .btn-add{
+      background:var(--blue-lt);border:none;border-radius:4px;padding:10px 20px;
+      font-family:var(--font-d);font-weight:700;font-size:14px;color:var(--white);
+      cursor:pointer;transition:background 0.2s;white-space:nowrap;
+    }
+    .btn-add:hover{background:var(--blue);}
+    .save-btn{
+      background:var(--yellow);color:var(--blue);border:none;border-radius:4px;
+      padding:11px 28px;font-family:var(--font-d);font-weight:700;font-size:15px;
+      cursor:pointer;transition:background 0.2s;margin-top:8px;
+    }
+    .save-btn:hover{background:#FFD700;}
+    .save-status{font-size:13px;color:#4ade80;margin-top:8px;min-height:20px;}
+
+    /* ENQUIRIES TABLE */
+    .enquiries-table{width:100%;border-collapse:collapse;}
+    .enquiries-table th{
+      text-align:left;padding:10px 14px;font-size:11px;letter-spacing:0.08em;
+      text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--border);
+    }
+    .enquiries-table td{padding:12px 14px;font-size:13px;color:var(--white);border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top;}
+    .enquiries-table tr:hover td{background:rgba(255,255,255,0.02);}
+    .badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:11px;font-weight:600;letter-spacing:0.06em;}
+    .badge-new{background:rgba(74,222,128,0.15);color:#4ade80;}
+    .badge-read{background:rgba(107,114,128,0.2);color:var(--gray);}
+
+    /* IMAGE UPLOAD AREAS */
+    .upload-area{
+      border:2px dashed rgba(255,255,255,0.15);border-radius:6px;padding:32px;
+      text-align:center;cursor:pointer;transition:border-color 0.2s;margin-bottom:12px;
+    }
+    .upload-area:hover{border-color:var(--yellow);}
+    .upload-area p{font-size:13px;color:var(--gray);margin-top:8px;}
+    .upload-area strong{font-size:14px;color:var(--white);}
+    .upload-preview{width:100%;max-height:160px;object-fit:cover;border-radius:4px;margin-top:8px;display:none;}
+    .file-note{font-size:11px;color:var(--gray);line-height:1.6;}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">Ghosh <span>Global</span></div>
+    <div class="login-sub">Admin Dashboard · Restricted Access</div>
+    <label>Admin Password</label>
+    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-yellow" onclick="doLogin()">Sign In</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div id="admin-shell">
+  <nav class="admin-nav">
+    <div class="admin-nav-logo">Ghosh <span>Global</span> Admin</div>
+    <div class="admin-nav-right">
+      <span class="nav-status" id="api-status">● Connecting…</span>
+      <a href="index.html" target="_blank"><button class="btn-sm">View Site ↗</button></a>
+      <button class="btn-sm btn-danger" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="sidebar-item active" onclick="showPanel('dashboard')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="sidebar-item" onclick="showPanel('stats')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Stats & Turnover
+      </div>
+      <div class="sidebar-item" onclick="showPanel('clients')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </div>
+      <div class="sidebar-item" onclick="showPanel('partners')">
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        Partners
+      </div>
+      <div class="sidebar-item" onclick="showPanel('images')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Images
+      </div>
+      <div class="sidebar-item" onclick="showPanel('enquiries')">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Enquiries
+      </div>
+    </div>
+
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="panel-title">Dashboard</div>
+        <div class="panel-sub">Welcome back, Debasis. Here's a quick overview.</div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-card-label">Total Clients</div><div class="stat-card-val" id="dash-clients">–</div></div>
+          <div class="stat-card"><div class="stat-card-label">Partners</div><div class="stat-card-val" id="dash-partners">–</div></div>
+          <div class="stat-card"><div class="stat-card-label">Annual Turnover</div><div class="stat-card-val">₹<span id="dash-turnover">–</span>Cr</div></div>
+          <div class="stat-card"><div class="stat-card-label">New Enquiries</div><div class="stat-card-val" id="dash-enquiries">–</div></div>
+        </div>
+        <div class="admin-card">
+          <h3>Quick Actions</h3>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn-add" onclick="showPanel('clients')">+ Add Client</button>
+            <button class="btn-add" onclick="showPanel('partners')">+ Add Partner</button>
+            <button class="btn-add" onclick="showPanel('stats')">Update Turnover</button>
+            <button class="btn-add" onclick="showPanel('enquiries')">View Enquiries</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="panel" id="panel-stats">
+        <div class="panel-title">Stats & Turnover</div>
+        <div class="panel-sub">Update numbers shown on the public website homepage.</div>
+        <div class="admin-card">
+          <h3>Company Statistics</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Annual Turnover (₹ Crore)</label>
+              <input type="number" id="stat-turnover" placeholder="e.g. 5" min="0" step="0.1">
+            </div>
+            <div class="field-group">
+              <label>Years of Experience</label>
+              <input type="number" id="stat-years" placeholder="e.g. 15" min="0">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Projects Completed</label>
+              <input type="number" id="stat-projects" placeholder="e.g. 200" min="0">
+            </div>
+            <div class="field-group">
+              <label>States Served</label>
+              <input type="number" id="stat-states" placeholder="e.g. 10" min="0">
+            </div>
+          </div>
+          <button class="save-btn" onclick="saveStats()">Save Stats</button>
+          <div class="save-status" id="stats-status"></div>
+        </div>
+      </div>
+
+      <!-- CLIENTS -->
+      <div class="panel" id="panel-clients">
+        <div class="panel-title">Clients</div>
+        <div class="panel-sub">Add or remove clients shown on the public website.</div>
+        <div class="admin-card">
+          <h3>Current Clients</h3>
+          <div id="clients-list"></div>
+          <div class="add-row">
+            <input type="text" id="new-client" placeholder="Client name e.g. IIT Bombay">
+            <button class="btn-add" onclick="addClient()">+ Add</button>
+          </div>
+          <div class="save-status" id="clients-status"></div>
+        </div>
+      </div>
+
+      <!-- PARTNERS -->
+      <div class="panel" id="panel-partners">
+        <div class="panel-title">Partners</div>
+        <div class="panel-sub">Manage authorised service and supply partners.</div>
+        <div class="admin-card">
+          <h3>Current Partners</h3>
+          <div id="partners-list"></div>
+          <div class="add-row">
+            <input type="text" id="new-partner" placeholder="Partner name e.g. Carrier India">
+            <button class="btn-add" onclick="addPartner()">+ Add</button>
+          </div>
+          <div class="save-status" id="partners-status"></div>
+        </div>
+      </div>
+
+      <!-- IMAGES -->
+      <div class="panel" id="panel-images">
+        <div class="panel-title">Images</div>
+        <div class="panel-sub">Upload and manage website images. Files are stored on the server.</div>
+
+        <div class="admin-card">
+          <h3>Hero Background Image</h3>
+          <p class="file-note" style="margin-bottom:16px;">Recommended: industrial/plant photo, min 1920×1080px, JPG format. Saved as <code>hero-bg.jpg</code>.</p>
+          <div class="upload-area" onclick="document.getElementById('hero-upload').click()">
+            <strong>Click to upload hero image</strong>
+            <p>JPG, PNG – max 5MB</p>
+            <img id="hero-preview" class="upload-preview" alt="Hero preview">
+          </div>
+          <input type="file" id="hero-upload" accept="image/*" style="display:none" onchange="previewImage(this,'hero-preview');uploadImage(this,'hero-bg')">
+          <div class="save-status" id="hero-status"></div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Company Logo</h3>
+          <p class="file-note" style="margin-bottom:16px;">Recommended: square PNG with transparent background, min 200×200px. Saved as <code>logo.png</code>.</p>
+          <div class="upload-area" onclick="document.getElementById('logo-upload').click()">
+            <strong>Click to upload logo</strong>
+            <p>PNG preferred – max 2MB</p>
+            <img id="logo-preview" class="upload-preview" alt="Logo preview">
+          </div>
+          <input type="file" id="logo-upload" accept="image/*" style="display:none" onchange="previewImage(this,'logo-preview');uploadImage(this,'logo')">
+          <div class="save-status" id="logo-status"></div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Proprietor Photo</h3>
+          <p class="file-note" style="margin-bottom:16px;">Professional headshot, min 400×400px. Saved as <code>proprietor.jpg</code>.</p>
+          <div class="upload-area" onclick="document.getElementById('prop-upload').click()">
+            <strong>Click to upload photo</strong>
+            <p>JPG, PNG – max 2MB</p>
+            <img id="prop-preview" class="upload-preview" alt="Proprietor preview">
+          </div>
+          <input type="file" id="prop-upload" accept="image/*" style="display:none" onchange="previewImage(this,'prop-preview');uploadImage(this,'proprietor')">
+          <div class="save-status" id="prop-status"></div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Favicon</h3>
+          <p class="file-note" style="margin-bottom:16px;">Square icon, 32×32px or 64×64px. ICO or PNG format. Saved as <code>favicon.ico</code>.</p>
+          <div class="upload-area" onclick="document.getElementById('fav-upload').click()">
+            <strong>Click to upload favicon</strong>
+            <p>ICO or PNG – max 1MB</p>
+          </div>
+          <input type="file" id="fav-upload" accept="image/x-icon,image/png" style="display:none" onchange="uploadImage(this,'favicon')">
+          <div class="save-status" id="fav-status"></div>
+        </div>
+      </div>
+
+      <!-- ENQUIRIES -->
+      <div class="panel" id="panel-enquiries">
+        <div class="panel-title">Enquiries</div>
+        <div class="panel-sub">Contact form submissions from the website.</div>
+        <div class="admin-card" style="overflow-x:auto;">
+          <table class="enquiries-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Contact</th><th>Organisation</th><th>Service</th><th>Message</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="enquiries-body">
+              <tr><td colspan="6" style="color:var(--gray);text-align:center;padding:32px;">Loading enquiries…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ──
+  const API_BASE = 'https://your-render-app.onrender.com'; // REPLACE THIS
+  // Admin password is checked against backend; this is just a local gate
+  // The real auth happens via JWT token from the backend /admin/login endpoint
+  let authToken = sessionStorage.getItem('gg_token') || null;
+
+  // Local state
+  let clientsList = [];
+  let partnersList = [];
+
+  // ── LOGIN ──
+  async function doLogin() {
+    const pwd = document.getElementById('pwd-input').value;
+    const err = document.getElementById('login-error');
+    if (!pwd) { err.textContent = 'Please enter password.'; return; }
+    try {
+      const res = await fetch(`${API_BASE}/admin/login`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({password: pwd})
+      });
+      if (res.ok) {
+        const data = await res.json();
+        authToken = data.token;
+        sessionStorage.setItem('gg_token', authToken);
+        showAdmin();
+      } else {
+        err.textContent = 'Incorrect password.';
+      }
+    } catch {
+      err.textContent = 'Cannot reach server. Check your connection.';
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('gg_token');
+    authToken = null;
+    document.getElementById('admin-shell').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+
+  function showAdmin() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-shell').style.display = 'block';
+    loadAll();
+  }
+
+  // ── AUTO LOGIN if token exists ──
+  if (authToken) showAdmin();
+
+  // ── API HELPERS ──
+  function authHeaders() {
+    return {'Content-Type':'application/json','Authorization':`Bearer ${authToken}`};
+  }
+
+  async function loadAll() {
+    try {
+      const [cRes, pRes, sRes, eRes] = await Promise.all([
+        fetch(`${API_BASE}/api/clients`),
+        fetch(`${API_BASE}/api/partners`),
+        fetch(`${API_BASE}/api/stats`),
+        fetch(`${API_BASE}/admin/enquiries`, {headers: authHeaders()})
+      ]);
+      if (cRes.ok) clientsList = await cRes.json();
+      if (pRes.ok) partnersList = await pRes.json();
+      if (sRes.ok) {
+        const s = await sRes.json();
+        document.getElementById('stat-turnover').value = s.turnover || '';
+        document.getElementById('stat-years').value = s.years || '';
+        document.getElementById('stat-projects').value = s.projects || '';
+        document.getElementById('stat-states').value = s.states || '';
+        document.getElementById('dash-turnover').textContent = s.turnover || '–';
+      }
+      if (eRes.ok) {
+        const enqs = await eRes.json();
+        renderEnquiries(enqs);
+        const newCount = enqs.filter(e => e.status === 'new').length;
+        document.getElementById('dash-enquiries').textContent = newCount;
+      }
+      document.getElementById('dash-clients').textContent = clientsList.length;
+      document.getElementById('dash-partners').textContent = partnersList.length;
+      renderClientsList();
+      renderPartnersList();
+      document.getElementById('api-status').textContent = '● Connected';
+      document.getElementById('api-status').style.color = '#4ade80';
+    } catch {
+      document.getElementById('api-status').textContent = '● Offline';
+      document.getElementById('api-status').style.color = '#f87171';
+    }
+  }
+
+  // ── CLIENTS ──
+  function renderClientsList() {
+    const el = document.getElementById('clients-list');
+    el.innerHTML = clientsList.map((c, i) => `
+      <div class="list-item">
+        <div class="list-item-name">${c.name || c}</div>
+        <button class="list-item-del" onclick="removeClient(${i})">Remove</button>
+      </div>`).join('') || '<p style="color:var(--gray);font-size:13px;">No clients yet.</p>';
+  }
+
+  function addClient() {
+    const val = document.getElementById('new-client').value.trim();
+    if (!val) return;
+    clientsList.push({name: val});
+    renderClientsList();
+    saveClients();
+    document.getElementById('new-client').value = '';
+  }
+
+  function removeClient(i) {
+    clientsList.splice(i, 1);
+    renderClientsList();
+    saveClients();
+  }
+
+  async function saveClients() {
+    try {
+      await fetch(`${API_BASE}/admin/clients`, {
+        method: 'PUT', headers: authHeaders(),
+        body: JSON.stringify(clientsList)
+      });
+      document.getElementById('clients-status').textContent = 'Saved!';
+      document.getElementById('dash-clients').textContent = clientsList.length;
+      setTimeout(() => document.getElementById('clients-status').textContent = '', 2000);
+    } catch { document.getElementById('clients-status').textContent = 'Save failed.'; }
+  }
+
+  // ── PARTNERS ──
+  function renderPartnersList() {
+    const el = document.getElementById('partners-list');
+    el.innerHTML = partnersList.map((p, i) => `
+      <div class="list-item">
+        <div class="list-item-name">${p.name || p}</div>
+        <button class="list-item-del" onclick="removePartner(${i})">Remove</button>
+      </div>`).join('') || '<p style="color:var(--gray);font-size:13px;">No partners yet.</p>';
+  }
+
+  function addPartner() {
+    const val = document.getElementById('new-partner').value.trim();
+    if (!val) return;
+    partnersList.push({name: val});
+    renderPartnersList();
+    savePartners();
+    document.getElementById('new-partner').value = '';
+  }
+
+  function removePartner(i) {
+    partnersList.splice(i, 1);
+    renderPartnersList();
+    savePartners();
+  }
+
+  async function savePartners() {
+    try {
+      await fetch(`${API_BASE}/admin/partners`, {
+        method: 'PUT', headers: authHeaders(),
+        body: JSON.stringify(partnersList)
+      });
+      document.getElementById('partners-status').textContent = 'Saved!';
+      document.getElementById('dash-partners').textContent = partnersList.length;
+      setTimeout(() => document.getElementById('partners-status').textContent = '', 2000);
+    } catch { document.getElementById('partners-status').textContent = 'Save failed.'; }
+  }
+
+  // ── STATS ──
+  async function saveStats() {
+    const payload = {
+      turnover: document.getElementById('stat-turnover').value,
+      years: document.getElementById('stat-years').value,
+      projects: document.getElementById('stat-projects').value,
+      states: document.getElementById('stat-states').value,
+    };
+    try {
+      await fetch(`${API_BASE}/admin/stats`, {
+        method: 'PUT', headers: authHeaders(),
+        body: JSON.stringify(payload)
+      });
+      document.getElementById('stats-status').textContent = 'Stats saved and live on website!';
+      document.getElementById('dash-turnover').textContent = payload.turnover || '–';
+      setTimeout(() => document.getElementById('stats-status').textContent = '', 3000);
+    } catch { document.getElementById('stats-status').textContent = 'Save failed.'; }
+  }
+
+  // ── ENQUIRIES ──
+  function renderEnquiries(list) {
+    const tbody = document.getElementById('enquiries-body');
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);text-align:center;padding:32px;">No enquiries yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.reverse().map(e => `
+      <tr>
+        <td>${e.name}</td>
+        <td>${e.contact}</td>
+        <td>${e.org || '–'}</td>
+        <td>${e.service || '–'}</td>
+        <td style="max-width:200px;color:rgba(255,255,255,0.6)">${e.message || '–'}</td>
+        <td><span class="badge badge-${e.status || 'new'}">${e.status || 'new'}</span></td>
+      </tr>`).join('');
+  }
+
+  // ── IMAGE UPLOAD ──
+  function previewImage(input, previewId) {
+    const file = input.files[0];
+    if (!file) return;
+    const preview = document.getElementById(previewId);
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+  }
+
+  async function uploadImage(input, type) {
+    const file = input.files[0];
+    if (!file) return;
+    const statusId = {hero:'hero-status',logo:'logo-status',proprietor:'prop-status',favicon:'fav-status'}[type];
+    document.getElementById(statusId).textContent = 'Uploading…';
+    const form = new FormData();
+    form.append('file', file);
+    form.append('type', type);
+    try {
+      const res = await fetch(`${API_BASE}/admin/upload`, {
+        method: 'POST',
+        headers: {'Authorization': `Bearer ${authToken}`},
+        body: form
+      });
+      if (res.ok) {
+        document.getElementById(statusId).textContent = 'Uploaded! Refresh the website to see it.';
+      } else {
+        document.getElementById(statusId).textContent = 'Upload failed.';
+      }
+    } catch {
+      document.getElementById(statusId).textContent = 'Upload failed – server error.';
+    }
+  }
+
+  // ── PANEL NAV ──
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+</script>
+</body>
+</html>
