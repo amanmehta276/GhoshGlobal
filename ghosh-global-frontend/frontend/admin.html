@@ -454,14 +454,10 @@
   </div>
 </div>
 
-<script>
-  // ── CONFIG ──
-  const API_BASE = 'https://your-render-app.onrender.com'; // REPLACE THIS
-  // Admin password is checked against backend; this is just a local gate
-  // The real auth happens via JWT token from the backend /admin/login endpoint
-  let authToken = sessionStorage.getItem('gg_token') || null;
 
-  // Local state
+<script>
+  const API_BASE = 'https://ghoshglobal.onrender.com';
+  let authToken = sessionStorage.getItem('gg_token') || null;
   let clientsList = [];
   let partnersList = [];
 
@@ -502,14 +498,13 @@
     loadAll();
   }
 
-  // ── AUTO LOGIN if token exists ──
   if (authToken) showAdmin();
 
-  // ── API HELPERS ──
   function authHeaders() {
     return {'Content-Type':'application/json','Authorization':`Bearer ${authToken}`};
   }
 
+  // ── LOAD ALL DATA ──
   async function loadAll() {
     try {
       const [cRes, pRes, sRes, eRes] = await Promise.all([
@@ -518,29 +513,40 @@
         fetch(`${API_BASE}/api/stats`),
         fetch(`${API_BASE}/admin/enquiries`, {headers: authHeaders()})
       ]);
-      if (cRes.ok) clientsList = await cRes.json();
-      if (pRes.ok) partnersList = await pRes.json();
+
+      if (cRes.ok) {
+        const data = await cRes.json();
+        // Normalize — backend may return [{name:...}, ...] or ["...", ...]
+        clientsList = data.map(c => ({name: typeof c === 'string' ? c : c.name, _id: c._id || null}));
+      }
+      if (pRes.ok) {
+        const data = await pRes.json();
+        partnersList = data.map(p => ({name: typeof p === 'string' ? p : p.name, _id: p._id || null}));
+      }
       if (sRes.ok) {
         const s = await sRes.json();
         document.getElementById('stat-turnover').value = s.turnover || '';
-        document.getElementById('stat-years').value = s.years || '';
+        document.getElementById('stat-years').value    = s.years || '';
         document.getElementById('stat-projects').value = s.projects || '';
-        document.getElementById('stat-states').value = s.states || '';
+        document.getElementById('stat-states').value   = s.states || '';
         document.getElementById('dash-turnover').textContent = s.turnover || '–';
       }
       if (eRes.ok) {
         const enqs = await eRes.json();
         renderEnquiries(enqs);
-        const newCount = enqs.filter(e => e.status === 'new').length;
-        document.getElementById('dash-enquiries').textContent = newCount;
+        document.getElementById('dash-enquiries').textContent = enqs.filter(e => e.status === 'new').length;
       }
-      document.getElementById('dash-clients').textContent = clientsList.length;
+
+      document.getElementById('dash-clients').textContent  = clientsList.length;
       document.getElementById('dash-partners').textContent = partnersList.length;
       renderClientsList();
       renderPartnersList();
+      loadCurrentImages();
+
       document.getElementById('api-status').textContent = '● Connected';
       document.getElementById('api-status').style.color = '#4ade80';
-    } catch {
+    } catch(e) {
+      console.error(e);
       document.getElementById('api-status').textContent = '● Offline';
       document.getElementById('api-status').style.color = '#f87171';
     }
@@ -549,20 +555,25 @@
   // ── CLIENTS ──
   function renderClientsList() {
     const el = document.getElementById('clients-list');
+    if (!clientsList.length) {
+      el.innerHTML = '<p style="color:var(--gray);font-size:13px;padding:8px 0;">No clients yet.</p>';
+      return;
+    }
     el.innerHTML = clientsList.map((c, i) => `
       <div class="list-item">
-        <div class="list-item-name">${c.name || c}</div>
-        <button class="list-item-del" onclick="removeClient(${i})">Remove</button>
-      </div>`).join('') || '<p style="color:var(--gray);font-size:13px;">No clients yet.</p>';
+        <div class="list-item-name">${c.name}</div>
+        <button class="list-item-del" onclick="removeClient(${i})">✕ Remove</button>
+      </div>`).join('');
   }
 
   function addClient() {
-    const val = document.getElementById('new-client').value.trim();
+    const input = document.getElementById('new-client');
+    const val = input.value.trim();
     if (!val) return;
-    clientsList.push({name: val});
+    clientsList.push({name: val, _id: null});
     renderClientsList();
     saveClients();
-    document.getElementById('new-client').value = '';
+    input.value = '';
   }
 
   function removeClient(i) {
@@ -575,31 +586,37 @@
     try {
       await fetch(`${API_BASE}/admin/clients`, {
         method: 'PUT', headers: authHeaders(),
-        body: JSON.stringify(clientsList)
+        body: JSON.stringify(clientsList.map(c => ({name: c.name})))
       });
-      document.getElementById('clients-status').textContent = 'Saved!';
+      const s = document.getElementById('clients-status');
+      s.textContent = '✓ Saved!';
       document.getElementById('dash-clients').textContent = clientsList.length;
-      setTimeout(() => document.getElementById('clients-status').textContent = '', 2000);
+      setTimeout(() => s.textContent = '', 2000);
     } catch { document.getElementById('clients-status').textContent = 'Save failed.'; }
   }
 
   // ── PARTNERS ──
   function renderPartnersList() {
     const el = document.getElementById('partners-list');
+    if (!partnersList.length) {
+      el.innerHTML = '<p style="color:var(--gray);font-size:13px;padding:8px 0;">No partners yet.</p>';
+      return;
+    }
     el.innerHTML = partnersList.map((p, i) => `
       <div class="list-item">
-        <div class="list-item-name">${p.name || p}</div>
-        <button class="list-item-del" onclick="removePartner(${i})">Remove</button>
-      </div>`).join('') || '<p style="color:var(--gray);font-size:13px;">No partners yet.</p>';
+        <div class="list-item-name">${p.name}</div>
+        <button class="list-item-del" onclick="removePartner(${i})">✕ Remove</button>
+      </div>`).join('');
   }
 
   function addPartner() {
-    const val = document.getElementById('new-partner').value.trim();
+    const input = document.getElementById('new-partner');
+    const val = input.value.trim();
     if (!val) return;
-    partnersList.push({name: val});
+    partnersList.push({name: val, _id: null});
     renderPartnersList();
     savePartners();
-    document.getElementById('new-partner').value = '';
+    input.value = '';
   }
 
   function removePartner(i) {
@@ -612,11 +629,12 @@
     try {
       await fetch(`${API_BASE}/admin/partners`, {
         method: 'PUT', headers: authHeaders(),
-        body: JSON.stringify(partnersList)
+        body: JSON.stringify(partnersList.map(p => ({name: p.name})))
       });
-      document.getElementById('partners-status').textContent = 'Saved!';
+      const s = document.getElementById('partners-status');
+      s.textContent = '✓ Saved!';
       document.getElementById('dash-partners').textContent = partnersList.length;
-      setTimeout(() => document.getElementById('partners-status').textContent = '', 2000);
+      setTimeout(() => s.textContent = '', 2000);
     } catch { document.getElementById('partners-status').textContent = 'Save failed.'; }
   }
 
@@ -624,37 +642,62 @@
   async function saveStats() {
     const payload = {
       turnover: document.getElementById('stat-turnover').value,
-      years: document.getElementById('stat-years').value,
+      years:    document.getElementById('stat-years').value,
       projects: document.getElementById('stat-projects').value,
-      states: document.getElementById('stat-states').value,
+      states:   document.getElementById('stat-states').value,
     };
     try {
       await fetch(`${API_BASE}/admin/stats`, {
         method: 'PUT', headers: authHeaders(),
         body: JSON.stringify(payload)
       });
-      document.getElementById('stats-status').textContent = 'Stats saved and live on website!';
+      const s = document.getElementById('stats-status');
+      s.textContent = '✓ Stats saved and live on website!';
       document.getElementById('dash-turnover').textContent = payload.turnover || '–';
-      setTimeout(() => document.getElementById('stats-status').textContent = '', 3000);
+      setTimeout(() => s.textContent = '', 3000);
     } catch { document.getElementById('stats-status').textContent = 'Save failed.'; }
   }
 
   // ── ENQUIRIES ──
   function renderEnquiries(list) {
     const tbody = document.getElementById('enquiries-body');
-    if (!list.length) {
+    if (!list || !list.length) {
       tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);text-align:center;padding:32px;">No enquiries yet.</td></tr>';
       return;
     }
-    tbody.innerHTML = list.reverse().map(e => `
+    tbody.innerHTML = [...list].reverse().map(e => `
       <tr>
-        <td>${e.name}</td>
-        <td>${e.contact}</td>
+        <td>${e.name || '–'}</td>
+        <td>${e.contact || '–'}</td>
         <td>${e.org || '–'}</td>
         <td>${e.service || '–'}</td>
         <td style="max-width:200px;color:rgba(255,255,255,0.6)">${e.message || '–'}</td>
         <td><span class="badge badge-${e.status || 'new'}">${e.status || 'new'}</span></td>
       </tr>`).join('');
+  }
+
+  // ── CURRENT IMAGES — show what's already uploaded ──
+  function loadCurrentImages() {
+    const images = [
+      { previewId: 'hero-preview',  url: `${API_BASE}/uploads/hero-bg.jpg`,     statusId: 'hero-status'  },
+      { previewId: 'logo-preview',  url: `${API_BASE}/uploads/logo.png`,         statusId: 'logo-status'  },
+      { previewId: 'prop-preview',  url: `${API_BASE}/uploads/proprietor.jpg`,   statusId: 'prop-status'  },
+    ];
+    images.forEach(({ previewId, url, statusId }) => {
+      const img = document.getElementById(previewId);
+      if (!img) return;
+      const testImg = new Image();
+      testImg.onload = () => {
+        img.src = url + '?t=' + Date.now(); // cache-bust
+        img.style.display = 'block';
+        document.getElementById(statusId).textContent = '✓ Current image loaded';
+      };
+      testImg.onerror = () => {
+        document.getElementById(statusId).textContent = 'No image uploaded yet';
+        document.getElementById(statusId).style.color = 'var(--gray)';
+      };
+      testImg.src = url + '?t=' + Date.now();
+    });
   }
 
   // ── IMAGE UPLOAD ──
@@ -669,8 +712,10 @@
   async function uploadImage(input, type) {
     const file = input.files[0];
     if (!file) return;
-    const statusId = {hero:'hero-status',logo:'logo-status',proprietor:'prop-status',favicon:'fav-status'}[type];
+    const statusMap = {'hero-bg':'hero-status','logo':'logo-status','proprietor':'prop-status','favicon':'fav-status'};
+    const statusId = statusMap[type];
     document.getElementById(statusId).textContent = 'Uploading…';
+    document.getElementById(statusId).style.color = 'var(--yellow)';
     const form = new FormData();
     form.append('file', file);
     form.append('type', type);
@@ -681,12 +726,15 @@
         body: form
       });
       if (res.ok) {
-        document.getElementById(statusId).textContent = 'Uploaded! Refresh the website to see it.';
+        document.getElementById(statusId).textContent = '✓ Uploaded! Refresh the website to see it.';
+        document.getElementById(statusId).style.color = '#4ade80';
       } else {
         document.getElementById(statusId).textContent = 'Upload failed.';
+        document.getElementById(statusId).style.color = '#f87171';
       }
     } catch {
       document.getElementById(statusId).textContent = 'Upload failed – server error.';
+      document.getElementById(statusId).style.color = '#f87171';
     }
   }
 
