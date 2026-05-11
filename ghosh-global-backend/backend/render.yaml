@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ghosh-global-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGODB_URL
+        sync: false          # Set manually in Render dashboard
+      - key: ADMIN_PASSWORD
+        sync: false          # Set manually in Render dashboard
+      - key: SECRET_KEY
+        generateValue: true  # Render auto-generates this
+      - key: DB_NAME
+        value: ghoshglobal

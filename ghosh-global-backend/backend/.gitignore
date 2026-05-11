@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Environment — NEVER commit real .env
+.env
+
+# Uploaded images (large files, serve from Render disk or CDN)
+uploads/
+
+# OS
+.DS_Store
+Thumbs.db
