@@ -481,3 +481,850 @@
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Old -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M/S Ghosh Global Services – HVAC & Electrical Solutions</title>
+  <meta name="description" content="Industrial cooling, HVAC, electrical, fire safety and CCTV solutions. Registered on GeM. Serving IIT, AIIMS, Airforce and more.">
+
+  <!-- ============================================================
+       FAVICON — replace with your actual favicon files
+       Place favicon.ico, favicon-32x32.png, apple-touch-icon.png
+       inside the /images/ folder
+  ============================================================ -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue:    #0A3D7C;
+      --blue-mid:#1457A8;
+      --blue-lt: #1E6FD9;
+      --yellow:  #F5C800;
+      --yellow-d:#C9A200;
+      --white:   #FFFFFF;
+      --off:     #F4F2EC;
+      --dark:    #0C0E12;
+      --gray:    #6B7280;
+      --border:  rgba(10,61,124,0.12);
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body:    'Barlow', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--off);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--blue);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 64px;
+      border-bottom: 3px solid var(--yellow);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    /* ============================================================
+       LOGO — replace the placeholder circle with your actual logo
+       Place logo.png (or .svg) in /images/ and update src below
+    ============================================================ */
+    .nav-logo-img {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--yellow);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800; font-size: 18px; color: var(--blue);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .nav-logo-img img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .nav-logo-img img.loaded { display: block; }
+    .nav-logo-text {
+      font-family: var(--font-display);
+      font-weight: 700; font-size: 17px;
+      color: var(--white); letter-spacing: 0.03em; line-height: 1.2;
+    }
+    .nav-logo-text span { color: var(--yellow); display: block; font-size: 11px; font-weight: 400; letter-spacing: 0.08em; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.8); text-decoration: none;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--yellow); }
+    .nav-cta {
+      background: var(--yellow); color: var(--blue) !important;
+      padding: 8px 18px; border-radius: 3px; font-weight: 700 !important;
+    }
+    .nav-cta:hover { background: #FFD700 !important; }
+    .nav-ham { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-ham span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: 0.3s; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding-top: 64px;
+      display: grid; grid-template-rows: 1fr auto;
+      position: relative; overflow: hidden;
+    }
+
+    /* ============================================================
+       HERO BACKGROUND IMAGE
+       Replace hero-bg.jpg in /images/ with your actual image
+       Recommended: industrial/HVAC plant photo, 1920×1080px minimum
+    ============================================================ */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(10,61,124,0.92) 0%, rgba(10,61,124,0.75) 50%, rgba(10,61,124,0.60) 100%),
+        url('images/hero-bg.jpg') center/cover no-repeat;
+      background-color: var(--blue); /* fallback if image missing */
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 60px,
+        rgba(255,255,255,0.018) 60px, rgba(255,255,255,0.018) 61px
+      );
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 5vw 40px;
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--yellow); color: var(--blue);
+      padding: 5px 14px; border-radius: 2px;
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 24px; width: fit-content;
+    }
+    .hero-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--blue); display: block; }
+    .hero-h1 {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(44px, 7vw, 88px); line-height: 0.95;
+      color: var(--white); letter-spacing: -0.01em;
+      margin-bottom: 24px;
+    }
+    .hero-h1 em { color: var(--yellow); font-style: normal; }
+    .hero-sub {
+      font-size: clamp(15px, 1.6vw, 18px); font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.82); max-width: 560px; margin-bottom: 40px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--yellow); color: var(--blue);
+      padding: 14px 32px; border-radius: 3px;
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #FFD700; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      padding: 14px 32px; border-radius: 3px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase;
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    .hero-stats {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    .hero-stat {
+      padding: 28px 5vw;
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 38px; color: var(--yellow); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-num span.counter { }
+    .stat-label { font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ── GEM BADGE ── */
+    .gem-banner {
+      background: var(--blue); color: var(--white);
+      padding: 14px 5vw; display: flex; align-items: center; justify-content: center;
+      gap: 16px; font-size: 14px; font-weight: 500; letter-spacing: 0.04em;
+    }
+    .gem-badge {
+      background: var(--yellow); color: var(--blue);
+      padding: 4px 12px; border-radius: 2px;
+      font-family: var(--font-display); font-weight: 800; font-size: 13px; letter-spacing: 0.08em;
+    }
+
+    /* ── SECTION DEFAULTS ── */
+    section { padding: 96px 5vw; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--blue-lt); margin-bottom: 16px;
+    }
+    .section-label::before { content: ''; width: 28px; height: 2px; background: var(--yellow); display: block; }
+    .section-title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(32px, 4.5vw, 52px); line-height: 1.05;
+      letter-spacing: -0.01em; margin-bottom: 16px;
+    }
+    .section-title em { color: var(--blue-lt); font-style: normal; }
+    .section-sub {
+      font-size: 16px; font-weight: 300; line-height: 1.8;
+      color: var(--gray); max-width: 600px; margin-bottom: 56px;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2px;
+    }
+    .service-card {
+      background: var(--off); padding: 40px 32px;
+      position: relative; overflow: hidden;
+      transition: background 0.25s;
+      cursor: default;
+    }
+    .service-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 3px; background: var(--yellow);
+      transition: width 0.3s ease;
+    }
+    .service-card:hover { background: var(--white); }
+    .service-card:hover::before { width: 100%; }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 4px;
+      background: var(--blue); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+    }
+    .service-icon svg { width: 28px; height: 28px; fill: none; stroke: var(--yellow); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .service-card h3 {
+      font-family: var(--font-display); font-weight: 700; font-size: 22px;
+      margin-bottom: 12px; color: var(--blue);
+    }
+    .service-card p { font-size: 14px; line-height: 1.8; color: var(--gray); }
+    .service-tag {
+      display: inline-block; margin-top: 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--blue-lt); border-bottom: 1px solid var(--blue-lt);
+      padding-bottom: 1px;
+    }
+
+    /* ── ABOUT / PROPRIETOR ── */
+    #about {
+      background: var(--blue);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    #about .section-title { color: var(--white); }
+    #about .section-title em { color: var(--yellow); }
+    #about .section-label { color: rgba(255,255,255,0.5); }
+    #about .section-label::before { background: var(--yellow); }
+    #about p { color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.9; margin-bottom: 20px; }
+    .about-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px; padding: 36px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center;
+    }
+    /* ============================================================
+       PROPRIETOR PHOTO — replace with actual photo
+       Place proprietor.jpg in /images/ folder
+       Recommended: professional headshot, min 400×400px
+    ============================================================ */
+    .about-photo {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(245,200,0,0.15);
+      border: 3px solid var(--yellow);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 36px; color: var(--yellow);
+    }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .about-name { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--white); }
+    .about-role { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow); font-weight: 600; }
+    .about-gem { margin-top: 8px; background: var(--yellow); color: var(--blue); padding: 5px 14px; border-radius: 2px; font-weight: 700; font-size: 13px; }
+
+    /* ── CLIENTS ── */
+    #clients { background: var(--off); }
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2px; margin-bottom: 0;
+    }
+    .client-card {
+      background: var(--white); padding: 28px 20px;
+      display: flex; align-items: center; gap: 14px;
+      transition: background 0.2s;
+    }
+    .client-card:hover { background: var(--blue); }
+    .client-card:hover .client-name { color: var(--white); }
+    .client-card:hover .client-dot { background: var(--yellow); }
+    .client-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; flex-shrink: 0; transition: background 0.2s; }
+    .client-name { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: var(--blue); transition: color 0.2s; line-height: 1.3; }
+
+    /* ── PARTNERS ── */
+    #partners { background: var(--white); }
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .partner-card {
+      border: 1px solid var(--border);
+      border-radius: 4px; padding: 20px 24px;
+      display: flex; align-items: center; gap: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .partner-card:hover { border-color: var(--blue-lt); box-shadow: 0 4px 20px rgba(10,61,124,0.08); }
+    .partner-num {
+      font-family: var(--font-display); font-weight: 800; font-size: 28px;
+      color: var(--yellow); line-height: 1; flex-shrink: 0; width: 36px;
+    }
+    .partner-name { font-size: 14px; font-weight: 500; color: var(--blue); line-height: 1.4; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--dark);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    }
+    #contact .section-title { color: var(--white); }
+    #contact .section-label { color: rgba(255,255,255,0.4); }
+    #contact .section-label::before { background: var(--yellow); }
+    .contact-info { display: flex; flex-direction: column; gap: 24px; }
+    .contact-row { display: flex; gap: 16px; }
+    .contact-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: rgba(245,200,0,0.1); border: 1px solid rgba(245,200,0,0.2);
+      border-radius: 3px; display: flex; align-items: center; justify-content: center;
+    }
+    .contact-icon svg { width: 18px; height: 18px; stroke: var(--yellow); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .contact-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 4px; font-weight: 600; }
+    .contact-val { font-size: 15px; color: var(--white); font-weight: 400; line-height: 1.5; }
+    .contact-val a { color: var(--yellow); text-decoration: none; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray); font-weight: 600; }
+    .form-group input, .form-group textarea, .form-group select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 3px; padding: 12px 16px;
+      font-family: var(--font-body); font-size: 14px; color: var(--white);
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--yellow); }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+    .form-group select option { background: var(--dark); }
+    #form-status { font-size: 13px; color: var(--yellow); min-height: 20px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue); color: rgba(255,255,255,0.5);
+      padding: 24px 5vw; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; font-size: 13px;
+      border-top: 3px solid var(--yellow);
+    }
+    footer a { color: var(--yellow); text-decoration: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--blue); padding: 20px 5vw; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+      .nav-links.open { display: flex; }
+      .nav-ham { display: flex; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+      #about, #contact { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-h1 { font-size: 42px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-img">
+      <img src="images/logo.jpg" alt="GG Logo" onload="this.classList.add('loaded')">
+    </div>
+    <div class="nav-logo-text">
+      Ghosh Global Services
+      <span>HVAC · Electrical · Fire Safety</span>
+    </div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#clients">Clients</a>
+    <a href="#partners">Partners</a>
+    <a href="#contact" class="nav-cta">Contact Us</a>
+  </div>
+  <div class="nav-ham" id="navHam" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Registered on GeM · Government e-Marketplace</div>
+    <h1 class="hero-h1">Industrial<br><em>HVAC &</em><br>Electrical<br>Solutions</h1>
+    <p class="hero-sub">Design, installation, maintenance and optimization of cooling, refrigeration and HVAC systems for industrial environments across India.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Get a Quote</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="stat-num"><span class="counter" data-target="15">0</span>+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num" id="stat-clients"><span class="counter" data-target="14">0</span>+</div>
+      <div class="stat-label">Major Clients</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num"><span class="counter" data-target="10">0</span>+</div>
+      <div class="stat-label">Brand Partners</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">₹<span class="counter" data-target="0" id="turnover-counter">--</span>Cr+</div>
+      <div class="stat-label" id="turnover-label">Annual Turnover</div>
+    </div>
+  </div>
+</section>
+
+<!-- GEM BANNER -->
+<div class="gem-banner">
+  <span class="gem-badge">GeM Registered</span>
+  Trusted by Indian Airforce · IIT Kharagpur · AIIMS · NTPC · DVC Power Plant
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="fade-up">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Complete <em>Engineering</em><br>Solutions</h2>
+    <p class="section-sub">From chiller erection to high-tension panel commissioning — every industrial MEP need under one roof.</p>
+  </div>
+  <div class="services-grid fade-up">
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      </div>
+      <h3>HVAC Systems</h3>
+      <p>Chiller erection, ductable units, cassette units, split ACs. Full lifecycle from design to commissioning and annual maintenance contracts.</p>
+      <span class="service-tag">Design · Install · Maintain</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <h3>Electrical Works</h3>
+      <p>Transformer, LT Panel, HT Panel erection, termination and commissioning. All types of wiring, cables and fault rectification.</p>
+      <span class="service-tag">HT · LT · Wiring</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M12 12v3M9 15h6"/></svg>
+      </div>
+      <h3>CCTV Systems</h3>
+      <p>Supply, installation and erection of complete CCTV surveillance systems. Maintenance and troubleshooting for existing setups.</p>
+      <span class="service-tag">Supply · Install · Support</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4M12 16h.01"/></svg>
+      </div>
+      <h3>Fire Safety</h3>
+      <p>Complete fire fighting installation, inspection, testing and maintenance of fire safety systems for industrial and institutional clients.</p>
+      <span class="service-tag">Install · Inspect · Certify</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h3>Civil & Interior</h3>
+      <p>Minor civil works, all types of furniture manufacturing and supply, false ceiling works for industrial and commercial spaces.</p>
+      <span class="service-tag">Civil · Furniture · Ceiling</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <h3>AMC & Maintenance</h3>
+      <p>Annual Maintenance Contracts for HVAC, electrical, CCTV and fire safety systems ensuring optimal performance and longevity.</p>
+      <span class="service-tag">AMC · Repairs · Optimization</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="fade-up">
+    <div class="section-label">Who We Are</div>
+    <h2 class="section-title">Engineering<br><em>Excellence</em><br>Since Day One</h2>
+    <p>M/S Ghosh Global Services is a proprietor-led industrial engineering firm specializing in the design, installation, maintenance and optimization of cooling, refrigeration and HVAC systems.</p>
+    <p>We have earned the trust of India's most demanding institutions — the Indian Airforce, IITs, AIIMS, NTPC, and DVC Power Plant — by delivering precision engineering with zero compromise on quality.</p>
+    <p>Registered on the Government e-Marketplace (GeM), we are authorized service and supply partners for leading brands including Blue Star, Voltas, Daikin, and Bharat Electronics Limited.</p>
+  </div>
+  <div class="fade-up">
+    <div class="about-card">
+      <!-- ============================================================
+           PROPRIETOR PHOTO
+           Replace the "DG" placeholder below with:
+           <img src="images/proprietor.jpg" alt="Debasis Ghosh">
+      ============================================================ -->
+      <div class="about-photo">DG</div>
+      <div>
+        <div class="about-name">Debasis Ghosh</div>
+        <div class="about-role">Proprietor</div>
+      </div>
+      <div class="about-gem">GeM Registered Vendor</div>
+      <p style="color:rgba(255,255,255,0.6);font-size:14px;line-height:1.7;text-align:center;margin-top:8px;">
+        Leading M/S Ghosh Global Services with a commitment to precision engineering and client satisfaction across industrial, defence and institutional sectors.
+      </p>
+      <div style="display:flex;gap:20px;margin-top:8px;">
+        <a href="tel:+919002211256" style="color:var(--yellow);font-size:13px;text-decoration:none;">+91 90022 11256</a>
+        <a href="tel:+916294211847" style="color:var(--yellow);font-size:13px;text-decoration:none;">+91 62942 11847</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients">
+  <div class="fade-up">
+    <div class="section-label">Our Clients</div>
+    <h2 class="section-title">Trusted by <em>India's Best</em></h2>
+    <p class="section-sub">From defence installations to premier research institutes, our clients represent the highest standards in Indian industry.</p>
+  </div>
+  <div class="clients-grid fade-up" id="clientsGrid">
+    <!-- Populated from API or static fallback -->
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section id="partners">
+  <div class="fade-up">
+    <div class="section-label">Authorised Partners</div>
+    <h2 class="section-title">Service &<br><em>Authorised</em> Partner</h2>
+    <p class="section-sub">Official service and supply partner for India's leading HVAC, electrical, and defence-grade brands.</p>
+  </div>
+  <div class="partners-grid fade-up" id="partnersGrid">
+    <!-- Populated from API or static fallback -->
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="fade-up">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title" style="color:var(--white);">Let's Work<br><em style="color:var(--yellow)">Together</em></h2>
+    <div class="contact-info">
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div>
+          <div class="contact-label">Head Office</div>
+          <div class="contact-val">Sahapur, P.O.- Kolaghat<br>Purba Medinipur – 721134, W.B.</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div>
+          <div class="contact-label">Branch Office</div>
+          <div class="contact-val">Prem Bazar, IIT Kharagpur<br>Paschim Medinipur – 721306, W.B.</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-val">
+            <a href="tel:+919002211256">+91 90022 11256</a><br>
+            <a href="tel:+916294211847">+91 62942 11847</a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val"><a href="mailto:ghoshglobal.services@gmail.com">ghoshglobal.services@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div>
+          <div class="contact-label">Website</div>
+          <div class="contact-val"><a href="http://www.ghoshglobal.com" target="_blank">www.ghoshglobal.com</a></div>
+        </div>
+      </div>
+      <div style="padding: 20px; background: rgba(245,200,0,0.08); border: 1px solid rgba(245,200,0,0.2); border-radius: 4px;">
+        <div class="contact-label" style="margin-bottom:6px;">Advisor</div>
+        <div style="color:var(--white);font-size:15px;font-weight:500;">B. Maity</div>
+        <a href="tel:+919002111176" style="color:var(--yellow);font-size:14px;text-decoration:none;">+91 90021 11176</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="fade-up">
+    <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" name="name" required placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Phone / Email</label>
+          <input type="text" name="contact" required placeholder="+91 or email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Organisation</label>
+        <input type="text" name="org" placeholder="Company or institution">
+      </div>
+      <div class="form-group">
+        <label>Service Required</label>
+        <select name="service">
+          <option value="">Select a service...</option>
+          <option>HVAC – Chiller / Ductable / Split AC</option>
+          <option>Electrical – HT/LT Panel / Transformer</option>
+          <option>CCTV Systems</option>
+          <option>Fire Safety</option>
+          <option>AMC / Maintenance</option>
+          <option>Civil / Interior Works</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" placeholder="Describe your requirement..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;text-align:center;">Send Enquiry</button>
+      <div id="form-status"></div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>© 2026 M/S Ghosh Global Services. All rights reserved.</div>
+  <div>Made By VyomTech</div>
+  <div>
+    <a href="mailto:ghoshglobal.services@gmail.com">ghoshglobal.services@gmail.com</a>
+    &nbsp;·&nbsp;
+    <a href="http://www.ghoshglobal.com">ghoshglobal.com</a>
+  </div>
+</footer>
+
+<script>
+  // ── CONFIG: point to your Render backend URL once deployed ──
+  const API_BASE = 'https://ghoshglobal.onrender.com';// REPLACE THIS
+
+  // Static fallback data (shown if API is unavailable)
+  const STATIC_CLIENTS = [
+    'IIT Kharagpur','Airforce – Salua, Kharagpur','Airforce – Vadsar, Gujarat',
+    'Airforce – Silong','Airforce – Port Blair','AIIMS Bhubaneswar',
+    'AIIMS Kalyani','Varanasi Lal Bahadur Shastri Airport','Burdwan Bengal Faith Hospital',
+    'NTPC – Barh Unit, Bihar','DVC Power Plant – Raghunathpur, Purulia',
+    'TATA Cancer Hospital, New Town Kolkata','CESC – Budge Budge, Kolkata',
+    'Candor Building, New Town Kolkata'
+  ];
+  const STATIC_PARTNERS = [
+    'Indian Airforce','Bharat Electronics Limited','Blue Star Ltd.',
+    'Voltas Ltd.','Daikin','SMS Limited',
+    'ETS Lindgren Engineering India Pvt. Ltd','Frankonia India EMC Solutions Pvt. Ltd.',
+    'Colour India Limited','Trity Environ Solutions Pvt. Ltd.'
+  ];
+
+  function renderClients(list) {
+    const grid = document.getElementById('clientsGrid');
+    grid.innerHTML = list.map(c => `
+      <div class="client-card">
+        <div class="client-dot"></div>
+        <div class="client-name">${c.name || c}</div>
+      </div>`).join('');
+  }
+
+  function renderPartners(list) {
+    const grid = document.getElementById('partnersGrid');
+    grid.innerHTML = list.map((p, i) => `
+      <div class="partner-card">
+        <div class="partner-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="partner-name">${p.name || p}</div>
+      </div>`).join('');
+  }
+
+  async function loadData() {
+    try {
+      const [cRes, pRes, sRes] = await Promise.all([
+        fetch(`${API_BASE}/api/clients`),
+        fetch(`${API_BASE}/api/partners`),
+        fetch(`${API_BASE}/api/stats`)
+      ]);
+      if (cRes.ok) renderClients(await cRes.json());
+      else renderClients(STATIC_CLIENTS);
+      if (pRes.ok) renderPartners(await pRes.json());
+      else renderPartners(STATIC_PARTNERS);
+      if (sRes.ok) {
+        const stats = await sRes.json();
+        if (stats.turnover) {
+          document.getElementById('turnover-counter').textContent = stats.turnover;
+        }
+      }
+    } catch {
+      renderClients(STATIC_CLIENTS);
+      renderPartners(STATIC_PARTNERS);
+    }
+  }
+
+  // ── Counter animation ──
+  function animateCounters() {
+    document.querySelectorAll('.counter[data-target]').forEach(el => {
+      const target = parseInt(el.dataset.target);
+      if (!target) return;
+      let current = 0;
+      const step = Math.ceil(target / 40);
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current;
+        if (current >= target) clearInterval(timer);
+      }, 40);
+    });
+  }
+
+  // ── Scroll animations ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── Stats counter triggers on hero visible ──
+  const heroObserver = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) animateCounters();
+  }, { threshold: 0.5 });
+  heroObserver.observe(document.querySelector('.hero-stats'));
+
+  // ── Nav toggle ──
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // ── Contact form ──
+  async function submitForm(e) {
+    e.preventDefault();
+    const status = document.getElementById('form-status');
+    const data = Object.fromEntries(new FormData(e.target));
+    status.textContent = 'Sending...';
+    try {
+      const res = await fetch(`${API_BASE}/api/contact`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        status.textContent = 'Thank you! We will get back to you shortly.';
+        e.target.reset();
+      } else {
+        status.textContent = 'Something went wrong. Please call us directly.';
+      }
+    } catch {
+      status.textContent = 'Could not send. Please email ghoshglobal.services@gmail.com';
+    }
+  }
+
+  // ── Init ──
+  loadData();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
