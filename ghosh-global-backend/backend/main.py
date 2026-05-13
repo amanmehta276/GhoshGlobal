@@ -65,7 +65,7 @@ app = FastAPI(title="Ghosh Global Services API", version="1.0.0", lifespan=lifes
 # ── CORS — allow your Netlify domain and localhost for dev ──
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost,http://127.0.0.1").split(",")
 # Add your Netlify URL here once deployed, e.g.:
-ALLOWED_ORIGINS = ["https://ghoshglobal.netlify.app", "https://ghoshglobal.com"]
+ALLOWED_ORIGINS = ["https://ghoshglobal.netlify.app", "https://www.ghoshglobalservices.com/"]
 
 app.add_middleware(
     CORSMiddleware,
